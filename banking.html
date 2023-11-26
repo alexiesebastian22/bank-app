@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Banking System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-2xl font-bold">Banking System</h1>
+            <ul class="flex space-x-4 text-white">
+                <li><a href="#" class="hover:underline">Home</a></li>
+                <li><a href="login.html" class="hover:underline">Login</a></li>
+                <li><a href="register.html" class="hover:underline">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto my-8 p-8 bg-white rounded-md shadow-md">
+        <h1 class="text-3xl font-bold mb-4">Banking Transactions</h1>
+
+        <div id="balanceSection">
+            <h2 class="text-2xl font-bold mb-2">Balance</h2>
+            <p>Your current balance: $<span id="balanceAmount">0.00</span></p>
+        </div>
+
+        <div id="withdrawalSection" class="mt-8">
+            <h2 class="text-2xl font-bold mb-2">Withdrawal</h2>
+            <label for="withdrawalAmount">Amount:</label>
+            <input type="number" id="withdrawalAmount" class="border rounded-md p-2 mb-4">
+            <button onclick="withdraw()" class="bg-red-500 text-white px-4 py-2 rounded-md">Withdraw</button>
+        </div>
+
+        <div id="depositSection" class="mt-8">
+            <h2 class="text-2xl font-bold mb-2">Deposit</h2>
+            <label for="depositAmount">Amount:</label>
+            <input type="number" id="depositAmount" class="border rounded-md p-2 mb-4">
+            <button onclick="deposit()" class="bg-green-500 text-white px-4 py-2 rounded-md">Deposit</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize balance from localStorage or set to 0 if not present
+        let balance = parseFloat(localStorage.getItem('balance')) || 0;
+
+        // Update the balance display
+        function updateBalance() {
+            document.getElementById('balanceAmount').textContent = balance.toFixed(2);
+        }
+
+        // Withdrawal function
+        function withdraw() {
+            const withdrawalAmount = parseFloat(document.getElementById('withdrawalAmount').value) || 0;
+
+            if (withdrawalAmount <= 0 || withdrawalAmount > balance) {
+                alert('Invalid withdrawal amount');
+            } else {
+                balance -= withdrawalAmount;
+                localStorage.setItem('balance', balance);
+                updateBalance();
+                alert('Withdrawal successful!');
+            }
+        }
+
+        // Deposit function
+        function deposit() {
+            const depositAmount = parseFloat(document.getElementById('depositAmount').value) || 0;
+
+            if (depositAmount <= 0) {
+                alert('Invalid deposit amount');
+            } else {
+                balance += depositAmount;
+                localStorage.setItem('balance', balance);
+                updateBalance();
+                alert('Deposit successful!');
+            }
+        }
+
+        // Initial update of balance display
+        updateBalance();
+    </script>
+
+</body>
+</html>

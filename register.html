@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Simple Banking System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-2xl font-bold">Banking System</h1>
+            <ul class="flex space-x-4 text-white">
+                <li><a href="#" class="hover:underline">Home</a></li>
+                <li><a href="#" class="hover:underline">Accounts</a></li>
+                <li><a href="#" class="hover:underline">Services</a></li>
+                <li><a href="login.html" class="hover:underline">Login</a></li>
+                <li><a href="register.html" class="hover:underline">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto my-8 p-8 bg-white rounded-md shadow-md">
+        <h1 class="text-3xl font-bold mb-4">Registration</h1>
+
+        <label for="registerUsername">Username:</label>
+        <input type="text" id="registerUsername" class="border rounded-md p-2 mb-4">
+        <label for="registerPassword">Password:</label>
+        <input type="password" id="registerPassword" class="border rounded-md p-2 mb-4">
+        <button onclick="register()" class="bg-green-500 text-white px-4 py-2 rounded-md">Register</button>
+    </div>
+
+    <script>
+        function register() {
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            if (users.some(u => u.username === username)) {
+                alert('Username is already taken. Please choose another.');
+            } else {
+                users.push({ username, password });
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Registration successful! Redirecting to login page...');
+
+                // Redirect to the login page after a brief delay (2 seconds in this example)
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        }
+    </script>
+
+</body>
+</html>
