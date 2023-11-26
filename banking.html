@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Banking System</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+        
 </head>
 <body class="bg-gray-100">
 
@@ -12,43 +13,56 @@
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-white text-2xl font-bold">Banking System</h1>
             <ul class="flex space-x-4 text-white">
-                <li><a href="#" class="hover:underline">Home</a></li>
-                <li><a href="login.html" class="hover:underline">Login</a></li>
-                <li><a href="register.html" class="hover:underline">Register</a></li>
+                <li><a href="index.html" class="nav-link hover:underline public">Home</a></li>
+                <li><a href="banking.html" class=" nav-link hover:underline private">Accounts</a></li>
+                <li><a href="login.html" class=" nav-link hover:underline login-reg">Login</a></li>
+                <li><a href="register.html" class=" nav-link hover:underline login-reg">Register</a></li>
+                <li><a onclick="logout()" class=" nav-link hover:underline private">Logout</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container mx-auto my-8 p-8 bg-white rounded-md shadow-md">
-        <h1 class="text-3xl font-bold mb-4">Banking Transactions</h1>
-
-        <div id="balanceSection">
-            <h2 class="text-2xl font-bold mb-2">Balance</h2>
-            <p>Your current balance: $<span id="balanceAmount">0.00</span></p>
+    <main>
+        <div class="container mx-auto my-8 p-8 flex justify-center">
+            <div class="w-1/2 bg-white rounded-md p-10 flex flex-col">
+                <h1 class="text-3xl font-bold mb-4">Banking Transactions</h1>
+        
+                <div id="balanceSection">
+                    <h2 class="text-2xl font-bold mb-2">Balance</h2>
+                    <p>Your current balance: $<span id="balanceAmount">0.00</span></p>
+                </div>
+        
+                <div id="withdrawalSection" class="mt-8">
+                    <h2 class="text-2xl font-bold mb-2">Withdrawal</h2>
+                    <label for="withdrawalAmount">Amount:</label>
+                    <input type="number" id="withdrawalAmount" class="border rounded-md p-2 mb-4">
+                    <button onclick="withdraw()" class="bg-red-500 text-white px-4 py-2 rounded-md">Withdraw</button>
+                </div>
+        
+                <div id="depositSection" class="mt-8">
+                    <h2 class="text-2xl font-bold mb-2">Deposit</h2>
+                    <label for="depositAmount">Amount:</label>
+                    <input type="number" id="depositAmount" class="border rounded-md p-2 mb-4">
+                    <button onclick="deposit()" class="bg-green-500 text-white px-4 py-2 rounded-md">Deposit</button>
+                </div>
+            </div>
         </div>
-
-        <div id="withdrawalSection" class="mt-8">
-            <h2 class="text-2xl font-bold mb-2">Withdrawal</h2>
-            <label for="withdrawalAmount">Amount:</label>
-            <input type="number" id="withdrawalAmount" class="border rounded-md p-2 mb-4">
-            <button onclick="withdraw()" class="bg-red-500 text-white px-4 py-2 rounded-md">Withdraw</button>
-        </div>
-
-        <div id="depositSection" class="mt-8">
-            <h2 class="text-2xl font-bold mb-2">Deposit</h2>
-            <label for="depositAmount">Amount:</label>
-            <input type="number" id="depositAmount" class="border rounded-md p-2 mb-4">
-            <button onclick="deposit()" class="bg-green-500 text-white px-4 py-2 rounded-md">Deposit</button>
-        </div>
-    </div>
-
+    </main>
+    
     <script>
+        // Users
+        const users = JSON.parse(localStorage.getItem('users'))
+        // login USers
+        const $loginUser = JSON.parse(localStorage.getItem('loginUser'))
+        // Need to update user
+        const userToUpdate = users.find(user => user.username === $loginUser.username)
         // Initialize balance from localStorage or set to 0 if not present
-        let balance = parseFloat(localStorage.getItem('balance')) || 0;
+        let balance = parseFloat(userToUpdate?.accountBalance) || 0;
 
         // Update the balance display
         function updateBalance() {
             document.getElementById('balanceAmount').textContent = balance.toFixed(2);
+
         }
 
         // Withdrawal function
@@ -59,7 +73,8 @@
                 alert('Invalid withdrawal amount');
             } else {
                 balance -= withdrawalAmount;
-                localStorage.setItem('balance', balance);
+                userToUpdate.accountBalance = balance
+                localStorage.setItem('users', JSON.stringify(users));
                 updateBalance();
                 alert('Withdrawal successful!');
             }
@@ -73,7 +88,8 @@
                 alert('Invalid deposit amount');
             } else {
                 balance += depositAmount;
-                localStorage.setItem('balance', balance);
+                userToUpdate.accountBalance = balance
+                localStorage.setItem('users', JSON.stringify(users));
                 updateBalance();
                 alert('Deposit successful!');
             }
@@ -82,6 +98,6 @@
         // Initial update of balance display
         updateBalance();
     </script>
-
+    <script src="js/main.js"></script>
 </body>
 </html>
